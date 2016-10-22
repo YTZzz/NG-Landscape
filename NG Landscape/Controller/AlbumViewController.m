@@ -12,18 +12,15 @@
 #import "UIImageView+WebCache.h"
 #import "Definition.h"
 #import "PhotoObject.h"
-#import "PhotoViewController.h"
+#import "PhotoBrowserController/PhotoBrowserNavigationController.h"
 
-@interface AlbumViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, DismissPageViewControllerDelegate, UIScrollViewDelegate>
+@interface AlbumViewController ()
 
 @property (weak, nonatomic) IBOutlet UICollectionView *albumCollectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *albumCollectionViewLayout;
-@property (weak, nonatomic) IBOutlet UIScrollView *transitionScrollView;
-@property (strong, nonatomic) UIImageView * transitionImageView;
-@property (strong, nonatomic) UIPageViewController * photoPageViewController;
+@property (strong, nonatomic) PhotoBrowserNavigationController * photoBrowserNavigationController;
 
 @property (strong, nonatomic) NSMutableArray <PhotoObject *> * photoObjectsArray;
-@property (strong, nonatomic) NSMutableArray * photoViewControlersArray;
 @property (strong, nonatomic) NSString * reuseIdentifier;
 
 @property (strong, nonatomic) NetworkManager * networkManager;
@@ -52,15 +49,6 @@
     [self rotateCollectionViewWithSize:SCREEN_SIZE];
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    
-    // 由于 navigationBar 会挡住后面的内容，故重设 UIEdgeInsetsMake
-    if (self.albumCollectionView.contentInset.top == 0) {
-        self.albumCollectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, 0, 0);
-    }
-}
-
 - (void)initAllViewsAndVariables {
     
     self.isRefreshData = NO;
@@ -73,14 +61,11 @@
     self.albumCollectionViewLayout.itemSize = CGSizeMake(SCREEN_WIDTH / 2, SCREEN_WIDTH / 2);
     
     self.photoObjectsArray = [[NSMutableArray alloc]init];
-    self.photoViewControlersArray = [[NSMutableArray alloc]init];
     
     self.networkManager = [NetworkManager sharedInstance];
-        
-    self.transitionImageView = [[UIImageView alloc]init];
-    self.transitionImageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.transitionImageView.backgroundColor = [UIColor blackColor];
-    [self.transitionScrollView addSubview:self.transitionImageView];
+    
+    UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    self.photoBrowserNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"PhotoBrowserNavigationController"];
 }
 
 - (void)loadPhotos {
@@ -115,23 +100,11 @@
             }
             NSDictionary * dict = [receivedPhotosArray objectAtIndex:i];
             [photoObject setPhotoObjectWithDictionary:dict];
-
-            PhotoViewController * photoViewController = nil;
-            if (i < weakSelf.photoViewControlersArray.count) {
-                photoViewController = [weakSelf.photoViewControlersArray objectAtIndex:i];
-            } else {
-                photoViewController = [[PhotoViewController alloc]initWithNibName:@"PhotoViewController" bundle:nil];
-                photoViewController.delegate = weakSelf;
-                [weakSelf.photoViewControlersArray addObject:photoViewController];
-            }
-            photoViewController.photoObject = photoObject;
-            photoViewController.isNeedRefreshData = YES;
         }
         
         if (receivedPhotosArray.count < self.photoObjectsArray.count) {
             for (int i = (int)receivedPhotosArray.count; i < self.photoObjectsArray.count; i++) {
                 [self.photoObjectsArray removeObjectAtIndex:i];
-                [self.photoViewControlersArray removeObjectAtIndex:i];
             }
         }
         
@@ -165,7 +138,6 @@
         return;
     }
     [self.albumCollectionView performBatchUpdates:nil completion:nil];
-    self.albumCollectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, 0, 0);
     [self.albumCollectionView setContentOffset:CGPointZero animated:NO];
 }
 
@@ -175,11 +147,7 @@
     return 1;
 }
 
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-//    if (self.photoObjectsArray.count == 0) {
-//        return 15;
-//    }
     NSLog(@"self.photoObjectsArray.count = %ld", self.photoObjectsArray.count);
     return self.photoObjectsArray.count;
 }
@@ -203,79 +171,14 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (self.photoPageViewController == nil) {
-        self.photoPageViewController = [[UIPageViewController alloc]initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
-        self.photoPageViewController.dataSource = self;
-        self.photoPageViewController.delegate = self;
-    }
-    
-    PhotoViewController * photoViewController = [self.photoViewControlersArray objectAtIndex:indexPath.row];
-    [self.photoPageViewController setViewControllers:@[photoViewController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-    
-    AlbumCollectionViewCell * albumCollectionViewCell = (AlbumCollectionViewCell *)[self.albumCollectionView cellForItemAtIndexPath:indexPath];
-    
-//    self.transitionImageView.image = cell.imageView.image;
-//    UIWindow * window = self.view.window;
-//    CGPoint startPointInWindow = [cell convertPoint:CGPointZero toView:window];
-//    self.transitionImageView.frame = CGRectMake(startPointInWindow.x, startPointInWindow.y, cell.frame.size.width, cell.frame.size.height);
-//    
-//    [self.view bringSubviewToFront:self.transitionScrollView];
-//    [self.transitionScrollView zoomToRect:cell.imageView.frame animated:YES];
-//    
-//    [self presentViewController:self.photoPageViewController animated:NO completion:nil];
-//    [self.view sendSubviewToBack:self.transitionScrollView];
-
-    [UIView animateWithDuration:2 animations:^(){
-        
-        [albumCollectionViewCell.imageView setFrame:CGRectMake(0, (SCREEN_HEIGHT - SCREEN_WIDTH * 2 / 3) / 2, SCREEN_WIDTH, SCREEN_HEIGHT)];
-        [albumCollectionViewCell setBackgroundColor:[UIColor blackColor]];
-        
-    } completion:^(BOOL finished){
-    
-        if (finished) {
-            [self presentViewController:self.photoPageViewController animated:NO completion:nil];
-        }
-        
-    }];
+    UIStoryboardSegue * segue = [UIStoryboardSegue segueWithIdentifier:@"PresentPhotoBrowserNavigationController"
+                                                                source:self
+                                                           destination:self.photoBrowserNavigationController performHandler:^(){
+                                                               NSLog(@"UIStoryboardSegue : PresentPhotoBrowserNavigationController");
+                                                           }];
+    [self prepareForSegue:segue sender:self];
+    [segue perform];
 }
 
-#pragma mark - UIPageViewControllerDataSource
-
-- (nullable UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
-    
-    if (self.photoViewControlersArray.firstObject == viewController) {
-        return nil;
-    }
-    int index = (int)[self.photoViewControlersArray indexOfObject:viewController] - 1;
-    return  [self.photoViewControlersArray objectAtIndex:index];
-}
-
-- (nullable UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
-    
-    if (self.photoViewControlersArray.lastObject == viewController) {
-        return nil;
-    }
-    int index = (int)[self.photoViewControlersArray indexOfObject:viewController] + 1;
-    return  [self.photoViewControlersArray objectAtIndex:index];
-}
-
-#pragma mark - UIPageViewControllerDelegate
-
-- (UIInterfaceOrientationMask)pageViewControllerSupportedInterfaceOrientations:(UIPageViewController *)pageViewController {
-    
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
-#pragma mark - DismissPageViewControllerDelegate
-
-- (void)disMissPageViewController {
-    [self.photoPageViewController dismissViewControllerAnimated:NO completion:nil];
-}
-
-#pragma mark - UIScrollViewDelegate
-
-- (nullable UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return self.transitionImageView;
-}
 
 @end

@@ -3,12 +3,12 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PhotoViewController">
             <connections>
-                <outlet property="backButton" destination="ZF8-NY-A1o" id="IBk-qS-R1S"/>
                 <outlet property="doubleTapGesture" destination="OKG-rK-KKd" id="glX-WS-8Bz"/>
                 <outlet property="imageView" destination="bv1-xj-txK" id="vje-Bd-KgX"/>
                 <outlet property="photoDetailTextView" destination="L5A-5j-jEy" id="BXI-Y3-Whb"/>
@@ -54,34 +54,17 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" editable="NO" text="我当时正赶着在日出前从位在杜拜城内的旅馆，前往玛格罕沙漠中拍摄罕见的阿拉伯大羚羊。我从低处往上拍，将这只生物和美丽天色用相机捕捉下来。" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L5A-5j-jEy">
-                            <constraints>
-                                <constraint firstAttribute="height" constant="91" id="bnm-oA-blZ"/>
-                            </constraints>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZF8-NY-A1o">
-                            <constraints>
-                                <constraint firstAttribute="height" constant="44" id="8zd-ry-Wm6"/>
-                                <constraint firstAttribute="width" constant="88" id="fnQ-xI-ZTA"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <state key="normal" title="返回"/>
-                            <connections>
-                                <action selector="touchBackButton:" destination="-1" eventType="touchUpInside" id="cBM-QS-fTL"/>
-                            </connections>
-                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="L5A-5j-jEy" firstAttribute="top" secondItem="yKz-a0-v8d" secondAttribute="bottom" id="Akv-zN-MNq"/>
                         <constraint firstItem="L5A-5j-jEy" firstAttribute="leading" secondItem="LEh-Vm-Mza" secondAttribute="leading" constant="8" id="Ptl-96-JAg"/>
-                        <constraint firstAttribute="bottom" secondItem="ZF8-NY-A1o" secondAttribute="bottom" constant="8" id="TFB-lc-jzX"/>
-                        <constraint firstItem="ZF8-NY-A1o" firstAttribute="centerX" secondItem="LEh-Vm-Mza" secondAttribute="centerX" id="VrX-Bk-kFA"/>
+                        <constraint firstAttribute="bottom" secondItem="L5A-5j-jEy" secondAttribute="bottom" constant="8" id="SqU-Fi-uMY"/>
                         <constraint firstItem="yKz-a0-v8d" firstAttribute="leading" secondItem="LEh-Vm-Mza" secondAttribute="leading" constant="13" id="Xwe-nK-Ofv"/>
-                        <constraint firstAttribute="height" constant="180" id="hyR-OL-inH"/>
-                        <constraint firstItem="ZF8-NY-A1o" firstAttribute="top" secondItem="L5A-5j-jEy" secondAttribute="bottom" constant="8" id="phz-3L-KDv"/>
                         <constraint firstAttribute="trailing" secondItem="L5A-5j-jEy" secondAttribute="trailing" constant="8" id="uEz-0b-flN"/>
                         <constraint firstAttribute="trailing" secondItem="yKz-a0-v8d" secondAttribute="trailing" constant="13" id="uh1-jd-dm1"/>
                         <constraint firstItem="yKz-a0-v8d" firstAttribute="top" secondItem="LEh-Vm-Mza" secondAttribute="top" constant="8" id="usF-7Q-hxn"/>
@@ -97,6 +80,7 @@
                 <constraint firstAttribute="bottom" secondItem="MjA-We-FWq" secondAttribute="bottom" id="cvs-kl-oZ3"/>
                 <constraint firstItem="MjA-We-FWq" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="sh5-U6-ReV"/>
                 <constraint firstItem="LEh-Vm-Mza" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="v4h-Zf-eaR"/>
+                <constraint firstItem="LEh-Vm-Mza" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="1/5" id="yMF-1J-9SM"/>
             </constraints>
             <point key="canvasLocation" x="33.5" y="54.5"/>
         </view>

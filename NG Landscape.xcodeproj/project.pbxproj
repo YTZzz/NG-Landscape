@@ -58,10 +58,12 @@
 		67B168451DB5030C00AF1804 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67B168441DB5030C00AF1804 /* Main.storyboard */; };
 		67B168521DB5464000AF1804 /* MainCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B168511DB5464000AF1804 /* MainCollectionViewController.m */; };
 		67B168621DB7C9BF00AF1804 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B168601DB7C9BF00AF1804 /* AlbumViewController.m */; };
-		67B168631DB7C9BF00AF1804 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 67B168611DB7C9BF00AF1804 /* AlbumViewController.xib */; };
-		67B168711DB7D64600AF1804 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B1686F1DB7D64600AF1804 /* PhotoViewController.m */; };
-		67B168721DB7D64600AF1804 /* PhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 67B168701DB7D64600AF1804 /* PhotoViewController.xib */; };
 		67B168751DB8EA0600AF1804 /* placeHolder.png in Resources */ = {isa = PBXBuildFile; fileRef = 67B168741DB8EA0600AF1804 /* placeHolder.png */; };
+		67B168BA1DBB5AC000AF1804 /* PhotoBrowserNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B168B21DBB5AC000AF1804 /* PhotoBrowserNavigationController.m */; };
+		67B168BB1DBB5AC000AF1804 /* PhotoBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B168B41DBB5AC000AF1804 /* PhotoBrowserViewController.m */; };
+		67B168BC1DBB5AC000AF1804 /* PhotoPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B168B61DBB5AC000AF1804 /* PhotoPageViewController.m */; };
+		67B168BD1DBB5AC000AF1804 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B168B81DBB5AC000AF1804 /* PhotoViewController.m */; };
+		67B168BE1DBB5AC000AF1804 /* PhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 67B168B91DBB5AC000AF1804 /* PhotoViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -176,11 +178,16 @@
 		67B168511DB5464000AF1804 /* MainCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainCollectionViewController.m; sourceTree = "<group>"; };
 		67B1685F1DB7C9BF00AF1804 /* AlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumViewController.h; sourceTree = "<group>"; };
 		67B168601DB7C9BF00AF1804 /* AlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumViewController.m; sourceTree = "<group>"; };
-		67B168611DB7C9BF00AF1804 /* AlbumViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlbumViewController.xib; sourceTree = "<group>"; };
-		67B1686E1DB7D64600AF1804 /* PhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewController.h; sourceTree = "<group>"; };
-		67B1686F1DB7D64600AF1804 /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewController.m; sourceTree = "<group>"; };
-		67B168701DB7D64600AF1804 /* PhotoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoViewController.xib; sourceTree = "<group>"; };
 		67B168741DB8EA0600AF1804 /* placeHolder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeHolder.png; sourceTree = "<group>"; };
+		67B168B11DBB5AC000AF1804 /* PhotoBrowserNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserNavigationController.h; sourceTree = "<group>"; };
+		67B168B21DBB5AC000AF1804 /* PhotoBrowserNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowserNavigationController.m; sourceTree = "<group>"; };
+		67B168B31DBB5AC000AF1804 /* PhotoBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserViewController.h; sourceTree = "<group>"; };
+		67B168B41DBB5AC000AF1804 /* PhotoBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowserViewController.m; sourceTree = "<group>"; };
+		67B168B51DBB5AC000AF1804 /* PhotoPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoPageViewController.h; sourceTree = "<group>"; };
+		67B168B61DBB5AC000AF1804 /* PhotoPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoPageViewController.m; sourceTree = "<group>"; };
+		67B168B71DBB5AC000AF1804 /* PhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewController.h; sourceTree = "<group>"; };
+		67B168B81DBB5AC000AF1804 /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewController.m; sourceTree = "<group>"; };
+		67B168B91DBB5AC000AF1804 /* PhotoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -264,10 +271,7 @@
 				67B168511DB5464000AF1804 /* MainCollectionViewController.m */,
 				67B1685F1DB7C9BF00AF1804 /* AlbumViewController.h */,
 				67B168601DB7C9BF00AF1804 /* AlbumViewController.m */,
-				67B168611DB7C9BF00AF1804 /* AlbumViewController.xib */,
-				67B1686E1DB7D64600AF1804 /* PhotoViewController.h */,
-				67B1686F1DB7D64600AF1804 /* PhotoViewController.m */,
-				67B168701DB7D64600AF1804 /* PhotoViewController.xib */,
+				67B168B01DBB5AC000AF1804 /* PhotoBrowserController */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -457,6 +461,22 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
+		67B168B01DBB5AC000AF1804 /* PhotoBrowserController */ = {
+			isa = PBXGroup;
+			children = (
+				67B168B11DBB5AC000AF1804 /* PhotoBrowserNavigationController.h */,
+				67B168B21DBB5AC000AF1804 /* PhotoBrowserNavigationController.m */,
+				67B168B31DBB5AC000AF1804 /* PhotoBrowserViewController.h */,
+				67B168B41DBB5AC000AF1804 /* PhotoBrowserViewController.m */,
+				67B168B51DBB5AC000AF1804 /* PhotoPageViewController.h */,
+				67B168B61DBB5AC000AF1804 /* PhotoPageViewController.m */,
+				67B168B71DBB5AC000AF1804 /* PhotoViewController.h */,
+				67B168B81DBB5AC000AF1804 /* PhotoViewController.m */,
+				67B168B91DBB5AC000AF1804 /* PhotoViewController.xib */,
+			);
+			path = PhotoBrowserController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -541,9 +561,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67B168631DB7C9BF00AF1804 /* AlbumViewController.xib in Resources */,
+				67B168BE1DBB5AC000AF1804 /* PhotoViewController.xib in Resources */,
 				67B168751DB8EA0600AF1804 /* placeHolder.png in Resources */,
-				67B168721DB7D64600AF1804 /* PhotoViewController.xib in Resources */,
 				67B167981DB500B000AF1804 /* LaunchScreen.storyboard in Resources */,
 				67B168421DB500C000AF1804 /* MainCollectionViewCell.xib in Resources */,
 				67B167951DB500B000AF1804 /* Assets.xcassets in Resources */,
@@ -591,16 +610,19 @@
 				67B168361DB500C000AF1804 /* UIImage+GIF.m in Sources */,
 				67B1683C1DB500C000AF1804 /* NetworkManager.m in Sources */,
 				67B1683D1DB500C000AF1804 /* AlbumObject.m in Sources */,
-				67B168711DB7D64600AF1804 /* PhotoViewController.m in Sources */,
+				67B168BB1DBB5AC000AF1804 /* PhotoBrowserViewController.m in Sources */,
 				67B1681D1DB500C000AF1804 /* MJRefreshAutoGifFooter.m in Sources */,
 				67B168191DB500C000AF1804 /* MJRefreshBackFooter.m in Sources */,
 				67B1682B1DB500C000AF1804 /* UIView+MJExtension.m in Sources */,
 				67B168371DB500C000AF1804 /* UIImage+MultiFormat.m in Sources */,
+				67B168BD1DBB5AC000AF1804 /* PhotoViewController.m in Sources */,
 				67B168321DB500C000AF1804 /* SDWebImageDownloaderOperation.m in Sources */,
+				67B168BC1DBB5AC000AF1804 /* PhotoPageViewController.m in Sources */,
 				67B1683E1DB500C000AF1804 /* PhotoObject.m in Sources */,
 				67B168281DB500C000AF1804 /* NSBundle+MJRefresh.m in Sources */,
 				67B1678A1DB500B000AF1804 /* main.m in Sources */,
 				67B1681B1DB500C000AF1804 /* MJRefreshFooter.m in Sources */,
+				67B168BA1DBB5AC000AF1804 /* PhotoBrowserNavigationController.m in Sources */,
 				67B168271DB500C000AF1804 /* MJRefreshConst.m in Sources */,
 				67B168301DB500C000AF1804 /* SDWebImageDecoder.m in Sources */,
 				67B168381DB500C000AF1804 /* UIImage+WebP.m in Sources */,

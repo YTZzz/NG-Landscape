@@ -17,7 +17,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *titleAndAuthorLabel;
 @property (weak, nonatomic) IBOutlet UITextView *photoDetailTextView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tapGesture;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *doubleTapGesture;
 
@@ -36,8 +35,6 @@
     self.tapGesture.numberOfTapsRequired = 1;
     self.doubleTapGesture.numberOfTapsRequired = 2;
     [self.tapGesture requireGestureRecognizerToFail:self.doubleTapGesture];
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -54,18 +51,11 @@
     
     NSString * titleAndAuthorStr = [NSString stringWithString:self.photoObject.title];
     if ([self.photoObject.author isEqualToString:@""] == NO) {
-        titleAndAuthorStr = [titleAndAuthorStr stringByAppendingString:[NSString stringWithFormat:@"- %@", self.photoObject.author]];
+        titleAndAuthorStr = [titleAndAuthorStr stringByAppendingString:[NSString stringWithFormat:@" - %@", self.photoObject.author]];
     }
     self.titleAndAuthorLabel.text = titleAndAuthorStr;
     
     self.photoDetailTextView.text = self.photoObject.content;
-}
-
-- (IBAction)touchBackButton:(id)sender {
-    
-    if (self.delegate) {
-        [self.delegate disMissPageViewController];
-    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -75,7 +65,10 @@
 
 - (IBAction)tapImageView:(id)sender {
     
-    [self.photoDetailView setHidden:!self.photoDetailView.isHidden];
+    BOOL setHiddenOrNot = !self.photoDetailView.isHidden;
+    
+    [self.photoDetailView setHidden:setHiddenOrNot];
+    [self.navigationController.navigationBar setHidden:setHiddenOrNot];
 }
 
 - (IBAction)doubleTapImageView:(UITapGestureRecognizer *)sender {
@@ -96,15 +89,8 @@
         
         CGRect rect = CGRectMake(xAfterZoom, yAfterZoom, widthAfterZoom, heightAfterZoom);
         [self.photoDetailView setHidden:YES];
-//        [self.scrollView zoomToRect:rect animated:YES];
-        [self.scrollView setZoomScale:2 animated:YES];
+        [self.scrollView zoomToRect:rect animated:YES];
     }
-
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    
 }
 
 #pragma mark - UIScrollViewDelegate

@@ -58,9 +58,7 @@
     self.loadAlbumsCount = 0;
     self.totalAlbumsCount = 0;
     self.reuseIdentifier = @"MainCollectionViewCell";
-    
-    self.title = @"首页";
-    
+        
     UINib *cellNib = [UINib nibWithNibName:self.reuseIdentifier bundle:nil];
     [self.MainCollectionView registerNib:cellNib forCellWithReuseIdentifier:self.reuseIdentifier];
     self.mainCollectionViewLayout.minimumLineSpacing = 0;
@@ -179,9 +177,6 @@
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-//    if (self.albumObjectsArray.count == 0) {
-//        return 15;
-//    }
     return self.albumObjectsArray.count;
 }
 
@@ -206,7 +201,8 @@
     }
     
     if (self.albumViewController == nil) {
-        self.albumViewController = [[AlbumViewController alloc]initWithNibName:@"AlbumViewController" bundle:nil];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        self.albumViewController = [storyboard instantiateViewControllerWithIdentifier:@"AlbumViewController"];
     }
 
     AlbumObject * albumObject = [self.albumObjectsArray objectAtIndex:indexPath.row];

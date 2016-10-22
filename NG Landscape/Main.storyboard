@@ -13,6 +13,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="qui-Ib-FDz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.20219435929999999" green="0.74494663380000004" blue="0.91886104059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -24,12 +25,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3bB-hf-jXX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-681" y="163"/>
+            <point key="canvasLocation" x="-681" y="161"/>
         </scene>
-        <!--Main Collection View Controller-->
+        <!--首页-->
         <scene sceneID="Oek-9x-wC5">
             <objects>
-                <collectionViewController id="3mh-tP-BTD" customClass="MainCollectionViewController" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="MainCollectionViewController" title="首页" useStoryboardIdentifierAsRestorationIdentifier="YES" id="3mh-tP-BTD" customClass="MainCollectionViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="5hg-kM-Wqd">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -59,11 +60,129 @@
                     <connections>
                         <outlet property="MainCollectionView" destination="5hg-kM-Wqd" id="Rij-sw-DLd"/>
                         <outlet property="mainCollectionViewLayout" destination="Zk3-CK-k9K" id="bh4-qT-pwd"/>
+                        <segue destination="6aP-KA-QYh" kind="show" identifier="showAlbumViewController" id="rFf-LT-z6d"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AMM-pg-qGp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="169" y="162"/>
+        </scene>
+        <!--Album View Controller-->
+        <scene sceneID="FHV-f8-AOy">
+            <objects>
+                <viewController storyboardIdentifier="AlbumViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="6aP-KA-QYh" customClass="AlbumViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cU7-ci-OXb"/>
+                        <viewControllerLayoutGuide type="bottom" id="hgW-Wj-XRs"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KX6-a3-N4C">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4oA-2Z-gsC">
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="M0P-lb-690">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AlbumCollectionViewCell" id="c6O-Js-vkd" customClass="AlbumCollectionViewCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="6aP-KA-QYh" id="ysk-TL-mbS"/>
+                                    <outlet property="delegate" destination="6aP-KA-QYh" id="8iV-7r-rJA"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="hgW-Wj-XRs" firstAttribute="top" secondItem="4oA-2Z-gsC" secondAttribute="bottom" id="dlM-fW-sev"/>
+                            <constraint firstItem="4oA-2Z-gsC" firstAttribute="leading" secondItem="KX6-a3-N4C" secondAttribute="leading" id="foe-zp-991"/>
+                            <constraint firstItem="4oA-2Z-gsC" firstAttribute="top" secondItem="KX6-a3-N4C" secondAttribute="top" id="hJw-0l-Wi4"/>
+                            <constraint firstAttribute="trailing" secondItem="4oA-2Z-gsC" secondAttribute="trailing" id="k8w-xo-oJQ"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="albumCollectionView" destination="4oA-2Z-gsC" id="TLU-JC-8an"/>
+                        <outlet property="albumCollectionViewLayout" destination="M0P-lb-690" id="Dmt-MK-yPC"/>
+                        <segue destination="9wm-fB-HQ2" kind="presentation" identifier="PresentPhotoBrowserNavigationController" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="wqs-cq-LWV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4sI-RY-izb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1022" y="161"/>
+        </scene>
+        <!--Photo Browser View Controller-->
+        <scene sceneID="dRC-H9-uKd">
+            <objects>
+                <viewController storyboardIdentifier="PhotoBrowserViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="YRu-ma-Maa" customClass="PhotoBrowserViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="fJp-mw-Isd"/>
+                        <viewControllerLayoutGuide type="bottom" id="rV4-Dx-XKL"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nYh-S6-eKM">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="met-BP-dDr">
+                                <connections>
+                                    <segue destination="1gw-ef-gU1" kind="embed" id="AV2-Yr-Pac"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="met-BP-dDr" firstAttribute="leading" secondItem="nYh-S6-eKM" secondAttribute="leading" id="C0D-FT-c7P"/>
+                            <constraint firstItem="met-BP-dDr" firstAttribute="top" secondItem="nYh-S6-eKM" secondAttribute="top" id="Syw-FR-eSp"/>
+                            <constraint firstAttribute="trailing" secondItem="met-BP-dDr" secondAttribute="trailing" id="b2w-oS-ORo"/>
+                            <constraint firstItem="rV4-Dx-XKL" firstAttribute="top" secondItem="met-BP-dDr" secondAttribute="bottom" id="u3c-1Q-2Xa"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="gMx-NU-qih"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fUh-We-8Jk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2585" y="161"/>
+        </scene>
+        <!--Photo Browser Navigation Controller-->
+        <scene sceneID="fcD-PZ-x78">
+            <objects>
+                <navigationController storyboardIdentifier="PhotoBrowserNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="9wm-fB-HQ2" customClass="PhotoBrowserNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yC9-pE-rt4">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.20219435929999999" green="0.74494663380000004" blue="0.91886104059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="YRu-ma-Maa" kind="relationship" relationship="rootViewController" id="xf0-ub-hKt"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Vfj-HV-ICy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1785" y="161"/>
+        </scene>
+        <!--Photo Page View Controller-->
+        <scene sceneID="BZ3-03-gx7">
+            <objects>
+                <viewController storyboardIdentifier="PhotoPageViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="1gw-ef-gU1" customClass="PhotoPageViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3tD-bX-N7V">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jcd-zN-CCn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3420" y="161"/>
         </scene>
     </scenes>
 </document>
