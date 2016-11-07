@@ -26,7 +26,7 @@ static id _instance;
     return _instance;
 }
 
--(id)copyWithZone:(struct _NSZone *)zone{
+- (id)copyWithZone:(struct _NSZone *)zone{
     return _instance;
 }
 
@@ -42,7 +42,6 @@ static id _instance;
 - (void)getAlbumObjectsFromServerWithPage:(int)page completionHandler:(void(^)(NSDictionary * receivedAlbumsDict))completionHandler {
 
     dispatch_async(DEFAULT_QUEUE, ^{
-        
 
         NSURL * url = [NSURL URLWithString:[NSString stringWithFormat:GET_ALBUMS_URL, page]];
         NSURLSession * session = [NSURLSession sharedSession];

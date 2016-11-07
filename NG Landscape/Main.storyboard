@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2338c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="K1U-uP-4CW">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="K1U-uP-4CW">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -10,12 +14,13 @@
         <scene sceneID="jz8-6Q-Wdk">
             <objects>
                 <navigationController id="K1U-uP-4CW" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="qui-Ib-FDz">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qui-Ib-FDz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.20219435929999999" green="0.74494663380000004" blue="0.91886104059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
                     </navigationBar>
@@ -31,8 +36,8 @@
         <scene sceneID="Oek-9x-wC5">
             <objects>
                 <collectionViewController storyboardIdentifier="MainCollectionViewController" title="首页" useStoryboardIdentifierAsRestorationIdentifier="YES" id="3mh-tP-BTD" customClass="MainCollectionViewController" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="5hg-kM-Wqd">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="5hg-kM-Wqd">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Zk3-CK-k9K">
@@ -58,9 +63,9 @@
                     </collectionView>
                     <navigationItem key="navigationItem" id="jW4-ke-IYd"/>
                     <connections>
-                        <outlet property="MainCollectionView" destination="5hg-kM-Wqd" id="Rij-sw-DLd"/>
+                        <outlet property="mainCollectionView" destination="5hg-kM-Wqd" id="FI8-i4-DAN"/>
                         <outlet property="mainCollectionViewLayout" destination="Zk3-CK-k9K" id="bh4-qT-pwd"/>
-                        <segue destination="6aP-KA-QYh" kind="show" identifier="showAlbumViewController" id="rFf-LT-z6d"/>
+                        <segue destination="6aP-KA-QYh" kind="show" identifier="showAlbumViewController" id="AKZ-Bx-m5L"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AMM-pg-qGp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -76,10 +81,11 @@
                         <viewControllerLayoutGuide type="bottom" id="hgW-Wj-XRs"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="KX6-a3-N4C">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4oA-2Z-gsC">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="M0P-lb-690">
                                     <size key="itemSize" width="50" height="50"/>
@@ -114,75 +120,118 @@
                     <connections>
                         <outlet property="albumCollectionView" destination="4oA-2Z-gsC" id="TLU-JC-8an"/>
                         <outlet property="albumCollectionViewLayout" destination="M0P-lb-690" id="Dmt-MK-yPC"/>
-                        <segue destination="9wm-fB-HQ2" kind="presentation" identifier="PresentPhotoBrowserNavigationController" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="wqs-cq-LWV"/>
+                        <segue destination="4Zd-Aj-UmZ" kind="presentation" identifier="showPhotoViewController" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="Urc-V0-xg7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4sI-RY-izb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1022" y="161"/>
+            <point key="canvasLocation" x="1020" y="161"/>
         </scene>
-        <!--Photo Browser View Controller-->
-        <scene sceneID="dRC-H9-uKd">
+        <!--Photo View Controller-->
+        <scene sceneID="G4b-hq-Umd">
             <objects>
-                <viewController storyboardIdentifier="PhotoBrowserViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="YRu-ma-Maa" customClass="PhotoBrowserViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="4Zd-Aj-UmZ" customClass="PhotoViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="fJp-mw-Isd"/>
-                        <viewControllerLayoutGuide type="bottom" id="rV4-Dx-XKL"/>
+                        <viewControllerLayoutGuide type="top" id="88F-9b-GEp"/>
+                        <viewControllerLayoutGuide type="bottom" id="aNe-uJ-mdT"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="nYh-S6-eKM">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <view key="view" contentMode="scaleToFill" id="iCW-fY-rNN">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="met-BP-dDr">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="WaI-cn-sCX">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="vCd-5Y-2m3">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCollectionViewCell" id="Fje-An-OnN">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
                                 <connections>
-                                    <segue destination="1gw-ef-gU1" kind="embed" id="AV2-Yr-Pac"/>
+                                    <outlet property="dataSource" destination="4Zd-Aj-UmZ" id="xwe-FI-wjl"/>
+                                    <outlet property="delegate" destination="4Zd-Aj-UmZ" id="fFi-Yt-iUm"/>
                                 </connections>
-                            </containerView>
+                            </collectionView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="摄于希腊多德喀尼群岛的卡尔帕索斯岛上的奥林巴斯。这天是2016年8月11日，订婚日。奥林巴斯是世上少数还能体验到拜占庭帝国生活方式的地方之一。在卡尔帕索斯岛的这一区，仍保留着习俗。这里的居民与世隔绝，你得开过26公里的泥路才到得了，柏油路则四年前才铺好。" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fOF-2k-du5">
+                                <rect key="frame" x="0.0" y="410.5" width="320" height="113.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="bQV-Zh-Cd3"/>
+                                </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="VIF-vk-tFO">
+                                <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="fn6-ub-5vu"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="6WJ-hR-2cj"/>
+                                    <barButtonItem title="↓保存" id="NhK-jO-oOA">
+                                        <color key="tintColor" red="0.20219435929999999" green="0.74494663380000004" blue="0.91886104059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="touchSaveButton:" destination="4Zd-Aj-UmZ" id="eaz-VG-tf4"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="kJS-C8-ees"/>
+                                    <barButtonItem title="返回" id="c2U-bZ-aL5">
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <action selector="touchBackButton:" destination="4Zd-Aj-UmZ" id="v0s-zQ-Hrf"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Cr8-Tn-Guu"/>
+                                    <barButtonItem title="♥️收藏" id="Zi7-C2-WVe">
+                                        <color key="tintColor" red="1" green="0.0" blue="0.2371496160833334" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="touchCollectButton:" destination="4Zd-Aj-UmZ" id="jsm-bB-Lnb"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="inG-Rd-ItO"/>
+                                </items>
+                            </toolbar>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="met-BP-dDr" firstAttribute="leading" secondItem="nYh-S6-eKM" secondAttribute="leading" id="C0D-FT-c7P"/>
-                            <constraint firstItem="met-BP-dDr" firstAttribute="top" secondItem="nYh-S6-eKM" secondAttribute="top" id="Syw-FR-eSp"/>
-                            <constraint firstAttribute="trailing" secondItem="met-BP-dDr" secondAttribute="trailing" id="b2w-oS-ORo"/>
-                            <constraint firstItem="rV4-Dx-XKL" firstAttribute="top" secondItem="met-BP-dDr" secondAttribute="bottom" id="u3c-1Q-2Xa"/>
+                            <constraint firstItem="fOF-2k-du5" firstAttribute="height" secondItem="iCW-fY-rNN" secondAttribute="height" multiplier="1/5" priority="750" id="8ip-xJ-bt0"/>
+                            <constraint firstItem="WaI-cn-sCX" firstAttribute="top" secondItem="iCW-fY-rNN" secondAttribute="top" id="FzO-2d-9ze"/>
+                            <constraint firstAttribute="trailing" secondItem="VIF-vk-tFO" secondAttribute="trailing" id="G6u-DD-yOd"/>
+                            <constraint firstAttribute="trailing" secondItem="fOF-2k-du5" secondAttribute="trailing" id="UAL-Gv-Sn8"/>
+                            <constraint firstItem="VIF-vk-tFO" firstAttribute="leading" secondItem="iCW-fY-rNN" secondAttribute="leading" id="UQa-Fb-BX4"/>
+                            <constraint firstAttribute="trailing" secondItem="WaI-cn-sCX" secondAttribute="trailing" id="Ynn-Vw-gfl"/>
+                            <constraint firstItem="aNe-uJ-mdT" firstAttribute="top" secondItem="VIF-vk-tFO" secondAttribute="bottom" id="Yqf-u3-NI4"/>
+                            <constraint firstItem="fOF-2k-du5" firstAttribute="leading" secondItem="iCW-fY-rNN" secondAttribute="leading" id="aCo-ey-2Pp"/>
+                            <constraint firstItem="WaI-cn-sCX" firstAttribute="leading" secondItem="iCW-fY-rNN" secondAttribute="leading" id="lWd-xb-amA"/>
+                            <constraint firstItem="aNe-uJ-mdT" firstAttribute="top" secondItem="WaI-cn-sCX" secondAttribute="bottom" id="vx7-X9-EAj"/>
+                            <constraint firstItem="VIF-vk-tFO" firstAttribute="top" secondItem="fOF-2k-du5" secondAttribute="bottom" id="yGX-dx-Om8"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="gMx-NU-qih"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fUh-We-8Jk" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2585" y="161"/>
-        </scene>
-        <!--Photo Browser Navigation Controller-->
-        <scene sceneID="fcD-PZ-x78">
-            <objects>
-                <navigationController storyboardIdentifier="PhotoBrowserNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="9wm-fB-HQ2" customClass="PhotoBrowserNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yC9-pE-rt4">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.20219435929999999" green="0.74494663380000004" blue="0.91886104059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </navigationBar>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <toolbarItems/>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <segue destination="YRu-ma-Maa" kind="relationship" relationship="rootViewController" id="xf0-ub-hKt"/>
+                        <outlet property="photoCollectionView" destination="WaI-cn-sCX" id="Auy-GC-OfK"/>
+                        <outlet property="photoCollectionViewLayout" destination="vCd-5Y-2m3" id="X1K-cH-1C7"/>
+                        <outlet property="textView" destination="fOF-2k-du5" id="qvo-RL-PZ4"/>
+                        <outlet property="toolBar" destination="VIF-vk-tFO" id="9YV-zx-ysl"/>
                     </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Vfj-HV-ICy" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1785" y="161"/>
-        </scene>
-        <!--Photo Page View Controller-->
-        <scene sceneID="BZ3-03-gx7">
-            <objects>
-                <viewController storyboardIdentifier="PhotoPageViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="1gw-ef-gU1" customClass="PhotoPageViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="3tD-bX-N7V">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Jcd-zN-CCn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fma-x6-m21" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3420" y="161"/>
+            <point key="canvasLocation" x="1773.5999999999999" y="161.46926536731635"/>
         </scene>
     </scenes>
 </document>

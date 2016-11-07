@@ -17,16 +17,16 @@
 
 @interface MainCollectionViewController ()
 
-@property (strong, nonatomic) IBOutlet UICollectionView *MainCollectionView;
+@property (strong, nonatomic) IBOutlet UICollectionView *mainCollectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *mainCollectionViewLayout;
-
-@property (strong, nonatomic) AlbumViewController * albumViewController;
 
 @property (strong, nonatomic) NSMutableArray <AlbumObject *> * albumObjectsArray;
 @property (assign, nonatomic) int currentPage;
 @property (assign, nonatomic) int loadAlbumsCount;
 @property (assign, nonatomic) int totalAlbumsCount;
 @property (strong, nonatomic) NSString * reuseIdentifier;
+@property (assign, nonatomic) int row;
+
 @property (assign, nonatomic) UIInterfaceOrientation collectionViewOrientationInBackground;
 
 @property (strong, nonatomic) NetworkManager * netWorkManager;
@@ -53,6 +53,8 @@
 
 - (void)initAllViewsAndVariables {
     
+    self.title = @"首页";
+    
     self.albumObjectsArray = [[NSMutableArray alloc]init];
     self.currentPage = 1;
     self.loadAlbumsCount = 0;
@@ -60,32 +62,30 @@
     self.reuseIdentifier = @"MainCollectionViewCell";
         
     UINib *cellNib = [UINib nibWithNibName:self.reuseIdentifier bundle:nil];
-    [self.MainCollectionView registerNib:cellNib forCellWithReuseIdentifier:self.reuseIdentifier];
+    [self.mainCollectionView registerNib:cellNib forCellWithReuseIdentifier:self.reuseIdentifier];
     self.mainCollectionViewLayout.minimumLineSpacing = 0;
     self.mainCollectionViewLayout.minimumInteritemSpacing = 0;
     self.mainCollectionViewLayout.itemSize = CGSizeMake(SCREEN_WIDTH, SCREEN_WIDTH * 2 / 3);
     
-    self.MainCollectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadFirstPage)];
-    self.MainCollectionView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMorePage)];
+    self.mainCollectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadFirstPage)];
+    self.mainCollectionView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMorePage)];
     
     self.netWorkManager = [NetworkManager sharedInstance];
 }
 
 - (void)loadFirstPage {
     [self loadAlubmsWithPage:1];
-    [self.MainCollectionView.mj_header endRefreshing];
+    [self.mainCollectionView.mj_header endRefreshing];
 }
 
 - (void)loadMorePage {
     [self loadAlubmsWithPage:self.currentPage+1];
-    [self.MainCollectionView.mj_footer endRefreshing];
+    [self.mainCollectionView.mj_footer endRefreshing];
 }
 
 - (void)loadAlubmsWithPage:(int)page {
     
     NSLog(@"loadAlubmsWithPage:page = %d begin!", page);
-    
-    __weak typeof(self) weakSelf = self;
     
     if (page == 1) {
         [self.albumObjectsArray removeAllObjects];
@@ -101,6 +101,7 @@
         return;
     }
     
+    __weak typeof(self) weakSelf = self;
     [self.netWorkManager getAlbumObjectsFromServerWithPage:page completionHandler:^(NSDictionary * receivedAlbumsDict) {
         
         if (receivedAlbumsDict == nil) {
@@ -136,7 +137,7 @@
         }
         
         dispatch_async(MAIN_QUEUE, ^(){
-            [weakSelf.MainCollectionView reloadData];
+            [weakSelf.mainCollectionView reloadData];
             NSLog(@"loadAlubmsWithPage:page = %d end!", page);
         });
     }];
@@ -146,12 +147,39 @@
 
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
+    // 旋转屏幕之后，调整 itemSize
+    CGSize originalItemSize = self.mainCollectionViewLayout.itemSize;
     if (size.width > size.height) {
         self.mainCollectionViewLayout.itemSize = CGSizeMake(size.width / 2, size.width / 3);
     } else {
         self.mainCollectionViewLayout.itemSize = CGSizeMake(size.width, size.width * 2 / 3);
     }
-    [self.MainCollectionView performBatchUpdates:nil completion:nil];
+    if (originalItemSize.width == self.mainCollectionViewLayout.itemSize.width) {
+        return;
+    }
+    
+    // 将之前可见的（不被 navigationBar 遮挡的）最上方的 cell 滚动至最上方
+    UICollectionViewCell * firstVisableCell = self.mainCollectionView.visibleCells.firstObject;
+    for (UICollectionViewCell * cell in self.mainCollectionView.visibleCells) {
+        if (cell.frame.origin.y < firstVisableCell.frame.origin.y
+            || (cell.frame.origin.y == firstVisableCell.frame.origin.y && cell.frame.origin.x < firstVisableCell.frame.origin.x)) {
+            
+            if ([cell convertPoint:cell.frame.origin toView:self.view.window].y > CGRectGetMaxY(self.navigationController.navigationBar.frame)) {
+                
+                firstVisableCell = cell;
+            }
+        }
+    }
+    NSIndexPath * indexPath = [self.mainCollectionView indexPathForCell:firstVisableCell];
+    
+    __weak typeof(self) weakSelf = self;
+    [self.mainCollectionView performBatchUpdates:nil completion:^(BOOL finished){
+        if (finished) {
+            [weakSelf.mainCollectionView scrollToItemAtIndexPath:indexPath
+                                                atScrollPosition:UICollectionViewScrollPositionTop
+                                                        animated:NO];
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -159,15 +187,15 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+
+    AlbumViewController * albumViewController = [segue destinationViewController];
+    albumViewController.albumObject = [self.albumObjectsArray objectAtIndex:self.row];
 }
-*/
+
 
 #pragma mark  - UICollectionViewDataSource
 
@@ -194,29 +222,9 @@
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.row < self.albumObjectsArray.count == NO) {
-        NSLog(@"ERROR : indexPath.row < self.albumObjectsArray.count == NO");
-        return;
-    }
-    
-    if (self.albumViewController == nil) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        self.albumViewController = [storyboard instantiateViewControllerWithIdentifier:@"AlbumViewController"];
-    }
-
-    AlbumObject * albumObject = [self.albumObjectsArray objectAtIndex:indexPath.row];
-    if (albumObject) {
-        
-        if (self.albumViewController.albumObject
-            && self.albumViewController.albumObject != albumObject) {
-            
-            self.albumViewController.isRefreshData = YES;
-        }
-        
-        self.albumViewController.albumObject = albumObject;
-        [self.navigationController pushViewController:self.albumViewController animated:YES];
-    }
+    self.row = (int)indexPath.row;
+    [self performSegueWithIdentifier:@"showAlbumViewController" sender:nil];
 }
+
 
 @end

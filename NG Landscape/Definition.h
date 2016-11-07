@@ -19,7 +19,4 @@
 #define GET_ALBUMS_URL @"http://dili.bdatu.com/jiekou/mains/p%d.html"
 #define GET_PHOTOS_URL @"http://dili.bdatu.com/jiekou/albums/a%d.html"
 
-#define HIDE_SHOW_PHOTO_DETAIL_VIEW_NOTIFICATION @"hideShowPhotoDetailViewNotification"
-#define SCREEN_ROTATED_NOTIFICATION @"screenRotatedNOtification"
-
 #endif /* Definition_h */

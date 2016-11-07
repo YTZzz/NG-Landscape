@@ -12,7 +12,6 @@
 @interface AlbumViewController : UIViewController
 
 @property (weak, nonatomic) AlbumObject * albumObject;
-@property (assign, nonatomic) BOOL isRefreshData;
 
 - (void)rotateCollectionViewWithSize:(CGSize)size;
 

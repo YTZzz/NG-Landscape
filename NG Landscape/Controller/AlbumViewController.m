@@ -12,16 +12,17 @@
 #import "UIImageView+WebCache.h"
 #import "Definition.h"
 #import "PhotoObject.h"
-#import "PhotoBrowserController/PhotoBrowserNavigationController.h"
+#import "PhotoViewController.h"
 
-@interface AlbumViewController ()
+@interface AlbumViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *albumCollectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *albumCollectionViewLayout;
-@property (strong, nonatomic) PhotoBrowserNavigationController * photoBrowserNavigationController;
 
 @property (strong, nonatomic) NSMutableArray <PhotoObject *> * photoObjectsArray;
+
 @property (strong, nonatomic) NSString * reuseIdentifier;
+@property (assign, nonatomic) int row;
 
 @property (strong, nonatomic) NetworkManager * networkManager;
 
@@ -38,20 +39,9 @@
     [self loadPhotos];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    if (self.isRefreshData == YES) {
-        self.isRefreshData = NO;
-        [self.albumCollectionView setContentOffset:CGPointZero animated:NO];
-        [self loadPhotos];
-    }
-    [self rotateCollectionViewWithSize:SCREEN_SIZE];
-}
-
 - (void)initAllViewsAndVariables {
     
-    self.isRefreshData = NO;
+    self.title = self.albumObject.title;
     self.reuseIdentifier = @"AlbumCollectionViewCell";
     
     UINib *cellNib = [UINib nibWithNibName:self.reuseIdentifier bundle:nil];
@@ -59,13 +49,11 @@
     self.albumCollectionViewLayout.minimumLineSpacing = 0;
     self.albumCollectionViewLayout.minimumInteritemSpacing = 0;
     self.albumCollectionViewLayout.itemSize = CGSizeMake(SCREEN_WIDTH / 2, SCREEN_WIDTH / 2);
+    self.albumCollectionView.delegate = self;
     
     self.photoObjectsArray = [[NSMutableArray alloc]init];
     
     self.networkManager = [NetworkManager sharedInstance];
-    
-    UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    self.photoBrowserNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"PhotoBrowserNavigationController"];
 }
 
 - (void)loadPhotos {
@@ -86,26 +74,15 @@
             return;
         }
         
-        NSArray * receivedPhotosArray = nil;
-        receivedPhotosArray = [receivedPhotoDict objectForKey:@"picture"];
+        NSArray * receivedPhotosArray = [receivedPhotoDict objectForKey:@"picture"];
         
         for (int i = 0; i < receivedPhotosArray.count; i++) {
             
-            PhotoObject * photoObject = nil;
-            if (i < weakSelf.photoObjectsArray.count) {
-                photoObject = [weakSelf.photoObjectsArray objectAtIndex:i];
-            } else {
-                photoObject = [[PhotoObject alloc]init];
-                [weakSelf.photoObjectsArray addObject:photoObject];
-            }
+            PhotoObject * photoObject = [[PhotoObject alloc]init];
+            [weakSelf.photoObjectsArray addObject:photoObject];
+            
             NSDictionary * dict = [receivedPhotosArray objectAtIndex:i];
             [photoObject setPhotoObjectWithDictionary:dict];
-        }
-        
-        if (receivedPhotosArray.count < self.photoObjectsArray.count) {
-            for (int i = (int)receivedPhotosArray.count; i < self.photoObjectsArray.count; i++) {
-                [self.photoObjectsArray removeObjectAtIndex:i];
-            }
         }
         
         dispatch_async(MAIN_QUEUE, ^(){
@@ -128,6 +105,7 @@
 
 - (void)rotateCollectionViewWithSize:(CGSize)size {
     
+    // 旋转屏幕之后，调整 itemSize
     CGSize originalItemSize = self.albumCollectionViewLayout.itemSize;
     if (size.width > size.height) {
         self.albumCollectionViewLayout.itemSize = CGSizeMake(size.width / 3, size.width / 3);
@@ -137,8 +115,30 @@
     if (originalItemSize.width == self.albumCollectionViewLayout.itemSize.width) {
         return;
     }
-    [self.albumCollectionView performBatchUpdates:nil completion:nil];
-    [self.albumCollectionView setContentOffset:CGPointZero animated:NO];
+    
+    // 将之前可见的（不被 navigationBar 遮挡的）最上方的 cell 滚动至最上方
+    UICollectionViewCell * firstVisableCell = self.albumCollectionView.visibleCells.firstObject;
+    
+    for (UICollectionViewCell * cell in self.albumCollectionView.visibleCells) {
+        if (cell.frame.origin.y < firstVisableCell.frame.origin.y
+            || (cell.frame.origin.y == firstVisableCell.frame.origin.y && cell.frame.origin.x < firstVisableCell.frame.origin.x)) {
+            
+            if ([cell convertPoint:cell.frame.origin toView:self.view.window].y > CGRectGetMaxY(self.navigationController.navigationBar.frame)) {
+                
+                firstVisableCell = cell;
+            }
+        }
+    }
+    NSIndexPath * indexPath = [self.albumCollectionView indexPathForCell:firstVisableCell];
+    
+    __weak typeof(self) weakSelf = self;
+    [self.albumCollectionView performBatchUpdates:nil completion:^(BOOL finished){
+        if (finished) {
+            [weakSelf.albumCollectionView scrollToItemAtIndexPath:indexPath
+                                                atScrollPosition:UICollectionViewScrollPositionTop
+                                                        animated:NO];
+        }
+    }];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -148,7 +148,6 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSLog(@"self.photoObjectsArray.count = %ld", self.photoObjectsArray.count);
     return self.photoObjectsArray.count;
 }
 
@@ -171,14 +170,18 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    UIStoryboardSegue * segue = [UIStoryboardSegue segueWithIdentifier:@"PresentPhotoBrowserNavigationController"
-                                                                source:self
-                                                           destination:self.photoBrowserNavigationController performHandler:^(){
-                                                               NSLog(@"UIStoryboardSegue : PresentPhotoBrowserNavigationController");
-                                                           }];
-    [self prepareForSegue:segue sender:self];
-    [segue perform];
+    self.row = (int)indexPath.row;
+    [self performSegueWithIdentifier:@"showPhotoViewController" sender:indexPath];
 }
 
+#pragma mark - Navigation
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    PhotoViewController * photoViewController = [segue destinationViewController];
+    NSLog(@"photoViewController = %@", photoViewController);
+    photoViewController.photoObjectsArray = self.photoObjectsArray;
+    photoViewController.row = self.row;
+}
 @end
+
