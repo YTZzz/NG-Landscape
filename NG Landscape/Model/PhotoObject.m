@@ -52,22 +52,22 @@
 
 - (void)setPhotoObjectWithDictionary:(NSDictionary *)dictionary {
     
-    self.Id = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"id"]].intValue;
-    self.albumid = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"albumid"]].intValue;
-    self.title = [dictionary objectForKey:@"title"];
-    self.content = [dictionary objectForKey:@"content"];
-    self.url = [dictionary objectForKey:@"url"];
-    self.size = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"size"]].integerValue;
-    self.addtime = [dictionary objectForKey:@"addtime"];
-    self.author = [dictionary objectForKey:@"author"];
-    self.thumb = [dictionary objectForKey:@"thumb"];
-    self.encoded = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"encoded"]].intValue;
-    self.weburl = [dictionary objectForKey:@"weburl"];
-    self.type = [dictionary objectForKey:@"type"];
-    self.yourshotlink = [dictionary objectForKey:@"yourshotlink"];
-    self.copyright = [dictionary objectForKey:@"copyright"];
-    self.pmd5 = [dictionary objectForKey:@"pmd5"];
-    self.sort = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"sort"]].intValue;
+    _Id = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"id"]].intValue;
+    _albumid = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"albumid"]].intValue;
+    _title = [dictionary objectForKey:@"title"];
+    _content = [dictionary objectForKey:@"content"];
+    _url = [dictionary objectForKey:@"url"];
+    _size = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"size"]].integerValue;
+    _addtime = [dictionary objectForKey:@"addtime"];
+    _author = [dictionary objectForKey:@"author"];
+    _thumb = [dictionary objectForKey:@"thumb"];
+    _encoded = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"encoded"]].intValue;
+    _weburl = [dictionary objectForKey:@"weburl"];
+    _type = [dictionary objectForKey:@"type"];
+    _yourshotlink = [dictionary objectForKey:@"yourshotlink"];
+    _copyright = [dictionary objectForKey:@"copyright"];
+    _pmd5 = [dictionary objectForKey:@"pmd5"];
+    _sort = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"sort"]].intValue;
 }
 
 @end

@@ -18,34 +18,20 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" maximumZoomScale="3" translatesAutoresizingMaskIntoConstraints="NO" id="jlT-xh-Bzh">
+                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" maximumZoomScale="3" translatesAutoresizingMaskIntoConstraints="NO" id="8XD-lQ-ze9">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <subviews>
-                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GPL-oT-BXa">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                            </imageView>
-                        </subviews>
-                        <constraints>
-                            <constraint firstItem="GPL-oT-BXa" firstAttribute="height" secondItem="jlT-xh-Bzh" secondAttribute="height" id="VLJ-M2-EeP"/>
-                            <constraint firstAttribute="bottom" secondItem="GPL-oT-BXa" secondAttribute="bottom" id="dNA-6G-G3y"/>
-                            <constraint firstItem="GPL-oT-BXa" firstAttribute="width" secondItem="jlT-xh-Bzh" secondAttribute="width" id="hes-rS-fRd"/>
-                            <constraint firstItem="GPL-oT-BXa" firstAttribute="leading" secondItem="jlT-xh-Bzh" secondAttribute="leading" id="j29-bP-OY1"/>
-                            <constraint firstItem="GPL-oT-BXa" firstAttribute="top" secondItem="jlT-xh-Bzh" secondAttribute="top" id="vtD-sK-Lrt"/>
-                            <constraint firstAttribute="trailing" secondItem="GPL-oT-BXa" secondAttribute="trailing" id="wc0-dm-8T3"/>
-                        </constraints>
                     </scrollView>
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="jlT-xh-Bzh" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="AEW-Cz-Q6y"/>
-                <constraint firstAttribute="bottom" secondItem="jlT-xh-Bzh" secondAttribute="bottom" id="Tue-04-kzs"/>
-                <constraint firstAttribute="trailing" secondItem="jlT-xh-Bzh" secondAttribute="trailing" id="dbd-73-jJc"/>
-                <constraint firstItem="jlT-xh-Bzh" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="ntc-li-eGM"/>
+                <constraint firstItem="8XD-lQ-ze9" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="2JX-Ek-ugc"/>
+                <constraint firstAttribute="trailing" secondItem="8XD-lQ-ze9" secondAttribute="trailing" id="cOO-dz-bPd"/>
+                <constraint firstAttribute="bottom" secondItem="8XD-lQ-ze9" secondAttribute="bottom" id="ho6-uU-oSV"/>
+                <constraint firstItem="8XD-lQ-ze9" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="nbR-gE-bB5"/>
             </constraints>
             <size key="customSize" width="320" height="568"/>
             <connections>
-                <outlet property="imageView" destination="GPL-oT-BXa" id="iSD-dd-bmR"/>
-                <outlet property="scrollView" destination="jlT-xh-Bzh" id="AjH-hD-x3O"/>
+                <outlet property="scrollView" destination="8XD-lQ-ze9" id="1pt-6o-A57"/>
             </connections>
             <point key="canvasLocation" x="-96" y="-9"/>
         </collectionViewCell>

@@ -11,10 +11,7 @@
 
 @interface PhotoCollectionViewCell () <UIScrollViewDelegate>
 
-@property (assign, nonatomic) CGFloat imageDisplayWidth;
-@property (assign, nonatomic) CGFloat imageDisplayHeight;
-@property (assign, nonatomic) CGRect imageRectInImageView;
-@property (assign, nonatomic) int maxOutSideSpace;
+@property (assign, nonatomic) BOOL isWidthEqual;
 
 @end
 
@@ -23,111 +20,133 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     
-    self.maxOutSideSpace = 20;
+    _scrollView.delegate = self;
     
-    self.scrollView.delegate = self;
+    UITapGestureRecognizer * tapScrollViewGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapImageView:)];
+    tapScrollViewGesture.numberOfTapsRequired = 1;
+    tapScrollViewGesture.numberOfTouchesRequired = 1;
+    [_scrollView addGestureRecognizer:tapScrollViewGesture];
 
+    _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+    _imageView.contentMode = UIViewContentModeScaleAspectFit;
+    _imageView.backgroundColor = [UIColor clearColor];
+    _imageView.userInteractionEnabled = YES;
+    [_scrollView addSubview:_imageView];
+    
     UITapGestureRecognizer * tapImageViewGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapImageView:)];
     tapImageViewGesture.numberOfTouchesRequired = 1;
     tapImageViewGesture.numberOfTapsRequired = 1;
-    [self.imageView addGestureRecognizer:tapImageViewGesture];
+    [_imageView addGestureRecognizer:tapImageViewGesture];
     
     UITapGestureRecognizer * doubleTapImageViewGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(doubleTapImageView:)];
     doubleTapImageViewGesture.numberOfTouchesRequired = 1;
     doubleTapImageViewGesture.numberOfTapsRequired = 2;
-    [self.imageView addGestureRecognizer:doubleTapImageViewGesture];
+    [_imageView addGestureRecognizer:doubleTapImageViewGesture];
     
     [tapImageViewGesture requireGestureRecognizerToFail:doubleTapImageViewGesture];
 }
 
 - (void)tapImageView:(UITapGestureRecognizer *)sender {
     
-    if ([self.delegate respondsToSelector:@selector(tapImageView:)]) {
-        [self.delegate tapImageView:sender];
+    if ([_delegate respondsToSelector:@selector(hideOrShowOtherViews)]) {
+        [_delegate hideOrShowOtherViews];
     }
 }
 
 - (void)doubleTapImageView:(UITapGestureRecognizer *)sender {
     
-    if (self.scrollView.zoomScale > self.scrollView.minimumZoomScale) {
+    if (_scrollView.zoomScale > _scrollView.minimumZoomScale) {
         
-        [self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:YES];
+        [_scrollView setZoomScale:_scrollView.minimumZoomScale animated:YES];
         
     } else {
         
-        if ([self.delegate respondsToSelector:@selector(doubleTapImageView:)]) {
-            [self.delegate doubleTapImageView:sender];
-        }
+        CGPoint tapPoint = [sender locationInView:_imageView];
         
-        CGPoint tapPoint = [sender locationInView:self.imageView];
-        
-        CGFloat w = self.scrollView.frame.size.width / self.scrollView.maximumZoomScale;
-        CGFloat h = self.scrollView.frame.size.height / self.scrollView.maximumZoomScale;
-        CGFloat x = tapPoint.x - (w / self.scrollView.maximumZoomScale);
-        CGFloat y = tapPoint.y - (h / self.scrollView.maximumZoomScale);
+        CGFloat w = _scrollView.frame.size.width / _scrollView.maximumZoomScale;
+        CGFloat h = _scrollView.frame.size.height / _scrollView.maximumZoomScale;
+        CGFloat x = tapPoint.x - (w / _scrollView.maximumZoomScale);
+        CGFloat y = tapPoint.y - (h / _scrollView.maximumZoomScale);
         
         [self.scrollView zoomToRect:CGRectMake(x, y, w, h) animated:YES];
     }
 }
 
-- (void)finishSetImage:(UIImage *)image {
-    
-    CGFloat imageScaleWidth = self.imageView.bounds.size.width / self.imageView.image.size.width ;
-    CGFloat imageScaleHeight = self.imageView.bounds.size.height / self.imageView.image.size.height;
-    CGFloat imageScale = fminf(imageScaleWidth, imageScaleHeight);
-    self.imageDisplayWidth = self.imageView.image.size.width * imageScale;
-    self.imageDisplayHeight = self.imageView.image.size.height * imageScale;
-    
-    CGSize imageViewSize = self.imageView.bounds.size;
-    self.imageRectInImageView = CGRectMake((imageViewSize.width - self.imageDisplayWidth) / 2,
-                                           (imageViewSize.height - self.imageDisplayHeight) / 2,
-                                           imageViewSize.width,
-                                           imageViewSize.height);
-}
-
 - (void)willDisplay {
-    [self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:NO];
+    [_scrollView setZoomScale:_scrollView.minimumZoomScale animated:NO];
+    
+    [self configImageViewSize];
 }
 
-// 将有黑边的方向（水平或垂直）图像居中
-- (void)scrollImageToCenter {
+- (void)configImageViewSize {
+    CGFloat widthDivideByHeightOfImage = _imageView.image.size.width / _imageView.image.size.height;
     
-    CGFloat scale = self.scrollView.zoomScale;
-    if (scale == self.scrollView.minimumZoomScale) {
-        return;
-    }
-
-    BOOL isNeedToScrollToCenter = NO;
+    CGFloat scrollViewWidth = self.frame.size.width;
+    CGFloat scrollViewHeight = self.frame.size.height;
     
-    CGFloat willMoveToX = self.scrollView.contentOffset.x;
-    if (self.imageDisplayWidth * scale < SCREEN_WIDTH) {
-        willMoveToX = (self.scrollView.contentSize.width - self.scrollView.frame.size.width) / 2;
-        isNeedToScrollToCenter = YES;
-    }
-    CGFloat willMoveToY = self.scrollView.contentOffset.y;
-    if (self.imageDisplayHeight * scale < SCREEN_HEIGHT) {
-        willMoveToY = (self.scrollView.contentSize.height - self.scrollView.frame.size.height) / 2;
-        isNeedToScrollToCenter = YES;
-    }
+    _isWidthEqual = widthDivideByHeightOfImage >= (scrollViewWidth / scrollViewHeight);
     
-    if (isNeedToScrollToCenter == NO) {
-        return;
+    if (_isWidthEqual) {
+        CGFloat imageViewHeightAfter = scrollViewWidth / widthDivideByHeightOfImage;
+        CGFloat imageViewYAfter = (scrollViewHeight - imageViewHeightAfter) / 2;
+        _imageView.frame = CGRectMake(0, imageViewYAfter, scrollViewWidth, imageViewHeightAfter);
+    } else {
+        CGFloat imageViewWidthAfter = scrollViewHeight * widthDivideByHeightOfImage;
+        CGFloat imageViewXAfter = (scrollViewWidth - imageViewWidthAfter) / 2;
+        _imageView.frame = CGRectMake(imageViewXAfter, 0, imageViewWidthAfter, scrollViewHeight);
     }
-    [self.scrollView setContentOffset:CGPointMake(willMoveToX, willMoveToY) animated:YES];
+    _scrollView.contentSize = _scrollView.bounds.size;
 }
+
 
 #pragma mark - UIScrollViewDelegate
 
 - (nullable UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
     
-    return self.imageView;
+    return _imageView;
 }
 
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(nullable UIView *)view atScale:(CGFloat)scale {
-    if (SCREEN_WIDTH > SCREEN_HEIGHT) {
-        return;
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(nullable UIView *)view {
+    
+    if ([_delegate respondsToSelector:@selector(hideOtherViews)]) {
+        [_delegate hideOtherViews];
     }
-    [self scrollImageToCenter];
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+
+    CGFloat imageViewWidth = _imageView.frame.size.width;
+    CGFloat imageViewHeight = _imageView.frame.size.height;
+    
+    if (_isWidthEqual) {
+        CGFloat scrollViewHeight = scrollView.frame.size.height;
+        if (imageViewHeight < scrollViewHeight) {
+            CGFloat topSpaceRemain = (scrollViewHeight - imageViewHeight) / 2;
+            _imageView.frame = CGRectMake(_imageView.frame.origin.x,
+                                          topSpaceRemain,
+                                          imageViewWidth,
+                                          imageViewHeight);
+        } else {
+            _imageView.frame = CGRectMake(_imageView.frame.origin.x,
+                                          0,
+                                          imageViewWidth,
+                                          imageViewHeight);
+        }
+    } else {
+        CGFloat scrollViewWidth = scrollView.frame.size.width;
+        if (imageViewWidth < scrollViewWidth) {
+            CGFloat leftSpaceRemain = (scrollViewWidth - imageViewWidth) / 2;
+            _imageView.frame = CGRectMake(leftSpaceRemain,
+                                          _imageView.frame.origin.y,
+                                          imageViewWidth,
+                                          imageViewHeight);
+        } else {
+            _imageView.frame = CGRectMake(0,
+                                          _imageView.frame.origin.y,
+                                          imageViewWidth,
+                                          imageViewHeight);
+        }
+    }
 }
 
 @end

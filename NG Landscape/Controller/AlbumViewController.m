@@ -41,19 +41,23 @@
 
 - (void)initAllViewsAndVariables {
     
-    self.title = self.albumObject.title;
-    self.reuseIdentifier = @"AlbumCollectionViewCell";
+    self.title = _albumObject.title;
+    _reuseIdentifier = @"AlbumCollectionViewCell";
     
     UINib *cellNib = [UINib nibWithNibName:self.reuseIdentifier bundle:nil];
-    [self.albumCollectionView registerNib:cellNib forCellWithReuseIdentifier:self.reuseIdentifier];
-    self.albumCollectionViewLayout.minimumLineSpacing = 0;
-    self.albumCollectionViewLayout.minimumInteritemSpacing = 0;
-    self.albumCollectionViewLayout.itemSize = CGSizeMake(SCREEN_WIDTH / 2, SCREEN_WIDTH / 2);
-    self.albumCollectionView.delegate = self;
+    [_albumCollectionView registerNib:cellNib forCellWithReuseIdentifier:self.reuseIdentifier];
+    _albumCollectionViewLayout.minimumLineSpacing = 0;
+    _albumCollectionViewLayout.minimumInteritemSpacing = 0;
+    if (SCREEN_WIDTH > SCREEN_HEIGHT) {
+        _albumCollectionViewLayout.itemSize = CGSizeMake(SCREEN_WIDTH / 3, SCREEN_WIDTH / 3);
+    } else {
+        _albumCollectionViewLayout.itemSize = CGSizeMake(SCREEN_WIDTH / 2, SCREEN_WIDTH / 2);
+    }
+    _albumCollectionView.delegate = self;
     
-    self.photoObjectsArray = [[NSMutableArray alloc]init];
+    _photoObjectsArray = [[NSMutableArray alloc]init];
     
-    self.networkManager = [NetworkManager sharedInstance];
+    _networkManager = [NetworkManager sharedInstance];
 }
 
 - (void)loadPhotos {
@@ -62,7 +66,7 @@
     
     __weak typeof(self) weakSelf = self;
     
-    [self.networkManager getPhotoObjectsFromServerWithAlbumId:self.albumObject.Id completionHandler:^(NSDictionary * receivedPhotoDict) {
+    [_networkManager getPhotoObjectsFromServerWithAlbumId:self.albumObject.Id completionHandler:^(NSDictionary * receivedPhotoDict) {
         
         if (receivedPhotoDict == nil) {
             NSLog(@"ERROR: receivedPhotoDict = nil");
@@ -106,33 +110,32 @@
 - (void)rotateCollectionViewWithSize:(CGSize)size {
     
     // 旋转屏幕之后，调整 itemSize
-    CGSize originalItemSize = self.albumCollectionViewLayout.itemSize;
+    CGSize originalItemSize = _albumCollectionViewLayout.itemSize;
     if (size.width > size.height) {
-        self.albumCollectionViewLayout.itemSize = CGSizeMake(size.width / 3, size.width / 3);
+        _albumCollectionViewLayout.itemSize = CGSizeMake(size.width / 3, size.width / 3);
     } else {
-        self.albumCollectionViewLayout.itemSize = CGSizeMake(size.width / 2, size.width / 2);
+        _albumCollectionViewLayout.itemSize = CGSizeMake(size.width / 2, size.width / 2);
     }
-    if (originalItemSize.width == self.albumCollectionViewLayout.itemSize.width) {
+    if (originalItemSize.width == _albumCollectionViewLayout.itemSize.width) {
         return;
     }
     
     // 将之前可见的（不被 navigationBar 遮挡的）最上方的 cell 滚动至最上方
-    UICollectionViewCell * firstVisableCell = self.albumCollectionView.visibleCells.firstObject;
-    
-    for (UICollectionViewCell * cell in self.albumCollectionView.visibleCells) {
-        if (cell.frame.origin.y < firstVisableCell.frame.origin.y
-            || (cell.frame.origin.y == firstVisableCell.frame.origin.y && cell.frame.origin.x < firstVisableCell.frame.origin.x)) {
-            
-            if ([cell convertPoint:cell.frame.origin toView:self.view.window].y > CGRectGetMaxY(self.navigationController.navigationBar.frame)) {
-                
-                firstVisableCell = cell;
-            }
+    UICollectionViewCell * firstVisableCell = _albumCollectionView.visibleCells.firstObject;
+    CGFloat sumOfXY = firstVisableCell.frame.origin.x + firstVisableCell.frame.origin.y;
+    NSArray * visibleCellsArray = _albumCollectionView.visibleCells;
+
+    for (UICollectionViewCell * cell in visibleCellsArray) {
+        CGFloat tmpSumOfXY = cell.frame.origin.x + cell.frame.origin.y;
+        if (tmpSumOfXY < sumOfXY) {
+            sumOfXY = tmpSumOfXY;
+            firstVisableCell = cell;
         }
     }
-    NSIndexPath * indexPath = [self.albumCollectionView indexPathForCell:firstVisableCell];
+    NSIndexPath * indexPath = [_albumCollectionView indexPathForCell:firstVisableCell];
     
     __weak typeof(self) weakSelf = self;
-    [self.albumCollectionView performBatchUpdates:nil completion:^(BOOL finished){
+    [_albumCollectionView performBatchUpdates:nil completion:^(BOOL finished){
         if (finished) {
             [weakSelf.albumCollectionView scrollToItemAtIndexPath:indexPath
                                                 atScrollPosition:UICollectionViewScrollPositionTop
@@ -148,19 +151,19 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.photoObjectsArray.count;
+    return _photoObjectsArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    AlbumCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:self.reuseIdentifier forIndexPath:indexPath];
+    AlbumCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:_reuseIdentifier forIndexPath:indexPath];
     
-    if (indexPath.row < self.photoObjectsArray.count == NO) {
+    if (indexPath.row < _photoObjectsArray.count == NO) {
         NSLog(@"ERROR : indexPath.row < self.photoObjectsArray.count == NO");
         return cell;
     }
     
-    PhotoObject * photoObject = [self.photoObjectsArray objectAtIndex:indexPath.row];
+    PhotoObject * photoObject = [_photoObjectsArray objectAtIndex:indexPath.row];
     [cell.imageView sd_setImageWithURL:[NSURL URLWithString:photoObject.url] placeholderImage:[UIImage imageNamed:@"placeHolder"]];
     
     return cell;
@@ -170,7 +173,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    self.row = (int)indexPath.row;
+    _row = (int)indexPath.row;
     [self performSegueWithIdentifier:@"showPhotoViewController" sender:indexPath];
 }
 
@@ -180,8 +183,8 @@
     
     PhotoViewController * photoViewController = [segue destinationViewController];
     NSLog(@"photoViewController = %@", photoViewController);
-    photoViewController.photoObjectsArray = self.photoObjectsArray;
-    photoViewController.row = self.row;
+    photoViewController.photoObjectsArray = _photoObjectsArray;
+    photoViewController.row = _row;
 }
 @end
 

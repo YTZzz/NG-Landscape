@@ -62,6 +62,7 @@
 		67B168621DB7C9BF00AF1804 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B168601DB7C9BF00AF1804 /* AlbumViewController.m */; };
 		67B168751DB8EA0600AF1804 /* placeHolder.png in Resources */ = {isa = PBXBuildFile; fileRef = 67B168741DB8EA0600AF1804 /* placeHolder.png */; };
 		67CCB0E11DBF8E39004D818E /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67CCB0E01DBF8E39004D818E /* PhotoViewController.m */; };
+		67E601921DD61AC5006631F3 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 67E601911DD61AC5006631F3 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -182,6 +183,7 @@
 		67B168741DB8EA0600AF1804 /* placeHolder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeHolder.png; sourceTree = "<group>"; };
 		67CCB0DF1DBF8E39004D818E /* PhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewController.h; sourceTree = "<group>"; };
 		67CCB0E01DBF8E39004D818E /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewController.m; sourceTree = "<group>"; };
+		67E601911DD61AC5006631F3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +207,7 @@
 		67B1677C1DB500B000AF1804 = {
 			isa = PBXGroup;
 			children = (
+				67E601911DD61AC5006631F3 /* README.md */,
 				67B167871DB500B000AF1804 /* NG Landscape */,
 				67B167A11DB500B000AF1804 /* NG LandscapeTests */,
 				67B167861DB500B000AF1804 /* Products */,
@@ -579,6 +582,7 @@
 				67B168251DB500C000AF1804 /* MJRefreshStateHeader.m in Sources */,
 				67B168351DB500C000AF1804 /* UIButton+WebCache.m in Sources */,
 				67B168341DB500C000AF1804 /* SDWebImagePrefetcher.m in Sources */,
+				67E601921DD61AC5006631F3 /* README.md in Sources */,
 				67B1678D1DB500B000AF1804 /* AppDelegate.m in Sources */,
 				670985B01DC3B5B600BB04EC /* PhotoCollectionViewCell.m in Sources */,
 				67B168291DB500C000AF1804 /* UIScrollView+MJExtension.m in Sources */,
@@ -744,7 +748,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = H3NT69D424;
 				INFOPLIST_FILE = "NG Landscape/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.TaozhuYe.NG-Landscape";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -758,7 +762,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = H3NT69D424;
 				INFOPLIST_FILE = "NG Landscape/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.TaozhuYe.NG-Landscape";
 				PRODUCT_NAME = "$(TARGET_NAME)";

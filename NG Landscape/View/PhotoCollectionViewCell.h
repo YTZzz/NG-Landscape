@@ -8,14 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol HideOtherViewDelegate <NSObject>
+
+- (void)hideOtherViews;
+- (void)hideOrShowOtherViews;
+
+@end
+
+
+
 @interface PhotoCollectionViewCell : UICollectionViewCell
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) UIImageView *imageView;
+@property (assign, nonatomic) id <HideOtherViewDelegate> delegate;
 
-@property (assign, nonatomic) id delegate;
-
-- (void)finishSetImage:(UIImage*)image;
 - (void)willDisplay;
 
 @end

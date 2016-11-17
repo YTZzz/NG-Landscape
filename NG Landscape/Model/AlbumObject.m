@@ -43,18 +43,18 @@
 
 - (void)setAlbumObjectWithDictionary:(NSDictionary *)dictionary {
     
-    self.Id = [NSString stringWithFormat: @"%@", [dictionary objectForKey:@"id"]].intValue;
-    self.title = [dictionary objectForKey:@"title"];
-    self.url = [dictionary objectForKey:@"url"];
-    self.addtime = [dictionary objectForKey:@"addtime"];
-    self.adshow = [dictionary objectForKey:@"adshow"];
-    self.fabu = [dictionary objectForKey:@"fabu"];
-    self.encoded = [NSString stringWithFormat: @"%@", [dictionary objectForKey:@"encoded"]].intValue;
-    self.amd5 = [dictionary objectForKey:@"amd5"];
-    self.sort = [NSString stringWithFormat: @"%@", [dictionary objectForKey:@"sort"]].intValue;
-    self.ds = [NSString stringWithFormat: @"%@", [dictionary objectForKey:@"ds"]].intValue;
-    self.timing = [NSString stringWithFormat: @"%@", [dictionary objectForKey:@"timing"]].intValue;
-    self.timingpublish = [dictionary objectForKey:@"timingpublish"];
+    _Id = [NSString stringWithFormat: @"%@", [dictionary objectForKey:@"id"]].intValue;
+    _title = [dictionary objectForKey:@"title"];
+    _url = [dictionary objectForKey:@"url"];
+    _addtime = [dictionary objectForKey:@"addtime"];
+    _adshow = [dictionary objectForKey:@"adshow"];
+    _fabu = [dictionary objectForKey:@"fabu"];
+    _encoded = [NSString stringWithFormat: @"%@", [dictionary objectForKey:@"encoded"]].intValue;
+    _amd5 = [dictionary objectForKey:@"amd5"];
+    _sort = [NSString stringWithFormat: @"%@", [dictionary objectForKey:@"sort"]].intValue;
+    _ds = [NSString stringWithFormat: @"%@", [dictionary objectForKey:@"ds"]].intValue;
+    _timing = [NSString stringWithFormat: @"%@", [dictionary objectForKey:@"timing"]].intValue;
+    _timingpublish = [dictionary objectForKey:@"timingpublish"];
 }
 
 @end

@@ -55,32 +55,32 @@
     
     self.title = @"首页";
     
-    self.albumObjectsArray = [[NSMutableArray alloc]init];
-    self.currentPage = 1;
-    self.loadAlbumsCount = 0;
-    self.totalAlbumsCount = 0;
-    self.reuseIdentifier = @"MainCollectionViewCell";
+    _albumObjectsArray = [[NSMutableArray alloc]init];
+    _currentPage = 1;
+    _loadAlbumsCount = 0;
+    _totalAlbumsCount = 0;
+    _reuseIdentifier = @"MainCollectionViewCell";
         
     UINib *cellNib = [UINib nibWithNibName:self.reuseIdentifier bundle:nil];
-    [self.mainCollectionView registerNib:cellNib forCellWithReuseIdentifier:self.reuseIdentifier];
-    self.mainCollectionViewLayout.minimumLineSpacing = 0;
-    self.mainCollectionViewLayout.minimumInteritemSpacing = 0;
-    self.mainCollectionViewLayout.itemSize = CGSizeMake(SCREEN_WIDTH, SCREEN_WIDTH * 2 / 3);
+    [_mainCollectionView registerNib:cellNib forCellWithReuseIdentifier:self.reuseIdentifier];
+    _mainCollectionViewLayout.minimumLineSpacing = 0;
+    _mainCollectionViewLayout.minimumInteritemSpacing = 0;
+    _mainCollectionViewLayout.itemSize = CGSizeMake(SCREEN_WIDTH, SCREEN_WIDTH * 2 / 3);
     
-    self.mainCollectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadFirstPage)];
-    self.mainCollectionView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMorePage)];
+    _mainCollectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadFirstPage)];
+    _mainCollectionView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMorePage)];
     
-    self.netWorkManager = [NetworkManager sharedInstance];
+    _netWorkManager = [NetworkManager sharedInstance];
 }
 
 - (void)loadFirstPage {
     [self loadAlubmsWithPage:1];
-    [self.mainCollectionView.mj_header endRefreshing];
+    [_mainCollectionView.mj_header endRefreshing];
 }
 
 - (void)loadMorePage {
-    [self loadAlubmsWithPage:self.currentPage+1];
-    [self.mainCollectionView.mj_footer endRefreshing];
+    [self loadAlubmsWithPage:_currentPage+1];
+    [_mainCollectionView.mj_footer endRefreshing];
 }
 
 - (void)loadAlubmsWithPage:(int)page {
@@ -88,13 +88,13 @@
     NSLog(@"loadAlubmsWithPage:page = %d begin!", page);
     
     if (page == 1) {
-        [self.albumObjectsArray removeAllObjects];
-        self.loadAlbumsCount = 0;
-        self.totalAlbumsCount = 0;
+        [_albumObjectsArray removeAllObjects];
+        _loadAlbumsCount = 0;
+        _totalAlbumsCount = 0;
     }
     
-    if (self.totalAlbumsCount != 0
-        && self.totalAlbumsCount == self.loadAlbumsCount) {
+    if (_totalAlbumsCount != 0
+        && _totalAlbumsCount == _loadAlbumsCount) {
         
         // TODO: 显示已加载完所有数据
         
@@ -120,7 +120,7 @@
         }
         // 更新目前加载过的相册数
         if ([receivedAlbumsDict objectForKey:@"pagecount"]) {
-            self.loadAlbumsCount += [NSString stringWithString:[receivedAlbumsDict objectForKey:@"pagecount"]].intValue;
+            weakSelf.loadAlbumsCount += [NSString stringWithString:[receivedAlbumsDict objectForKey:@"pagecount"]].intValue;
         }
         // 更新总相册数
         if ([receivedAlbumsDict objectForKey:@"total"]) {
@@ -146,40 +146,36 @@
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator {
 
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    
+
     // 旋转屏幕之后，调整 itemSize
     CGSize originalItemSize = self.mainCollectionViewLayout.itemSize;
     if (size.width > size.height) {
-        self.mainCollectionViewLayout.itemSize = CGSizeMake(size.width / 2, size.width / 3);
+        _mainCollectionViewLayout.itemSize = CGSizeMake(size.width / 2, size.width / 3);
     } else {
-        self.mainCollectionViewLayout.itemSize = CGSizeMake(size.width, size.width * 2 / 3);
+        _mainCollectionViewLayout.itemSize = CGSizeMake(size.width, size.width * 2 / 3);
     }
-    if (originalItemSize.width == self.mainCollectionViewLayout.itemSize.width) {
+    if (originalItemSize.width == _mainCollectionViewLayout.itemSize.width) {
         return;
     }
     
     // 将之前可见的（不被 navigationBar 遮挡的）最上方的 cell 滚动至最上方
-    UICollectionViewCell * firstVisableCell = self.mainCollectionView.visibleCells.firstObject;
-    for (UICollectionViewCell * cell in self.mainCollectionView.visibleCells) {
-        if (cell.frame.origin.y < firstVisableCell.frame.origin.y
-            || (cell.frame.origin.y == firstVisableCell.frame.origin.y && cell.frame.origin.x < firstVisableCell.frame.origin.x)) {
-            
-            if ([cell convertPoint:cell.frame.origin toView:self.view.window].y > CGRectGetMaxY(self.navigationController.navigationBar.frame)) {
-                
-                firstVisableCell = cell;
-            }
+    UICollectionViewCell * firstVisableCell = _mainCollectionView.visibleCells.firstObject;
+    CGFloat sumOfXY = firstVisableCell.frame.origin.x + firstVisableCell.frame.origin.y;
+    NSArray * visibleCellsArray = _mainCollectionView.visibleCells;
+    for (UICollectionViewCell * cell in visibleCellsArray) {
+        CGFloat tmpSumOfXY = cell.frame.origin.x + cell.frame.origin.y;
+        if (tmpSumOfXY < sumOfXY) {
+            sumOfXY = tmpSumOfXY;
+            firstVisableCell = cell;
         }
     }
-    NSIndexPath * indexPath = [self.mainCollectionView indexPathForCell:firstVisableCell];
     
-    __weak typeof(self) weakSelf = self;
-    [self.mainCollectionView performBatchUpdates:nil completion:^(BOOL finished){
-        if (finished) {
-            [weakSelf.mainCollectionView scrollToItemAtIndexPath:indexPath
-                                                atScrollPosition:UICollectionViewScrollPositionTop
-                                                        animated:NO];
-        }
-    }];
+    NSIndexPath * indexPath = [_mainCollectionView indexPathForCell:firstVisableCell];
+    
+    [_mainCollectionView reloadData];
+    [_mainCollectionView scrollToItemAtIndexPath:indexPath
+                                        atScrollPosition:UICollectionViewScrollPositionTop
+                                                animated:NO];    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -187,13 +183,12 @@
     // Dispose of any resources that can be recreated.
 }
 
-
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
     AlbumViewController * albumViewController = [segue destinationViewController];
-    albumViewController.albumObject = [self.albumObjectsArray objectAtIndex:self.row];
+    albumViewController.albumObject = [_albumObjectsArray objectAtIndex:_row];
 }
 
 
@@ -205,15 +200,19 @@
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.albumObjectsArray.count;
+    // 兼容刚打开应用时就为横屏时，屏幕旋转前后 numberOfItems 不一致导致的闪退问题
+    if (_albumObjectsArray.count == 0) {
+        return 15;
+    }
+    return _albumObjectsArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    MainCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:self.reuseIdentifier forIndexPath:indexPath];
+    MainCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:_reuseIdentifier forIndexPath:indexPath];
     
-    if (indexPath.row < self.albumObjectsArray.count) {
-        AlbumObject * albumObject = [self.albumObjectsArray objectAtIndex:indexPath.row];
+    if (indexPath.row < _albumObjectsArray.count) {
+        AlbumObject * albumObject = [_albumObjectsArray objectAtIndex:indexPath.row];
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:albumObject.url]];
     }
     return cell;
@@ -222,8 +221,12 @@
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    self.row = (int)indexPath.row;
+    _row = (int)indexPath.row;
     [self performSegueWithIdentifier:@"showAlbumViewController" sender:nil];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSLog(@"%f", scrollView.contentOffset.y);
 }
 
 

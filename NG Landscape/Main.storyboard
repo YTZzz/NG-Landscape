@@ -130,7 +130,7 @@
         <!--Photo View Controller-->
         <scene sceneID="G4b-hq-Umd">
             <objects>
-                <viewController storyboardIdentifier="PhotoViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="4Zd-Aj-UmZ" customClass="PhotoViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoViewController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="4Zd-Aj-UmZ" customClass="PhotoViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="88F-9b-GEp"/>
                         <viewControllerLayoutGuide type="bottom" id="aNe-uJ-mdT"/>
@@ -163,7 +163,7 @@
                                     <outlet property="delegate" destination="4Zd-Aj-UmZ" id="fFi-Yt-iUm"/>
                                 </connections>
                             </collectionView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="摄于希腊多德喀尼群岛的卡尔帕索斯岛上的奥林巴斯。这天是2016年8月11日，订婚日。奥林巴斯是世上少数还能体验到拜占庭帝国生活方式的地方之一。在卡尔帕索斯岛的这一区，仍保留着习俗。这里的居民与世隔绝，你得开过26公里的泥路才到得了，柏油路则四年前才铺好。" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fOF-2k-du5">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="摄于希腊多德喀尼群岛的卡尔帕索斯岛上的奥林巴斯。这天是2016年8月11日，订婚日。奥林巴斯是世上少数还能体验到拜占庭帝国生活方式的地方之一。在卡尔帕索斯岛的这一区，仍保留着习俗。这里的居民与世隔绝，你得开过26公里的泥路才到得了，柏油路则四年前才铺好。" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fOF-2k-du5">
                                 <rect key="frame" x="0.0" y="410.5" width="320" height="113.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
                                 <constraints>

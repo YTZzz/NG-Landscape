@@ -13,13 +13,14 @@
 #import "PhotoObject.h"
 #import "UIImageView+WebCache.h"
 
-@interface PhotoViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface PhotoViewController () <UICollectionViewDataSource, UICollectionViewDelegate, HideOtherViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *photoCollectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *photoCollectionViewLayout;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolBar;
 
+@property (assign, nonatomic) BOOL shouldStatusBarHidden;
 @property (assign, nonatomic) BOOL isHiddenAnimationRunning;
 @property (strong, nonatomic) NSString * reuseIdentifier;
 
@@ -33,33 +34,39 @@
     [self initAllViewsAndVariables];
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return _shouldStatusBarHidden;
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    NSLog(@"viewWillAppear self.row = %d", self.row);
-    NSLog(@"viewWillAppear %@", self.photoCollectionView);
-    [self.photoCollectionView setContentOffset:CGPointMake(self.row * SCREEN_WIDTH, 0) animated:NO];
+    
+    [_photoCollectionView setContentOffset:CGPointMake(_row * SCREEN_WIDTH, 0) animated:NO];
     [self setTextViewContent];
 }
 
-
 - (void)initAllViewsAndVariables {
     
-    self.isHiddenAnimationRunning = NO;
+    _isHiddenAnimationRunning = NO;
+    _shouldStatusBarHidden = NO;
+    if (SCREEN_HEIGHT < SCREEN_WIDTH) {
+        _shouldStatusBarHidden = YES;
+    }
     
-    PhotoObject * photoObject = [self.photoObjectsArray objectAtIndex:self.row];
+    PhotoObject * photoObject = [_photoObjectsArray objectAtIndex:_row];
     self.title = photoObject.title;
 
-    self.reuseIdentifier = @"PhotoCollectionViewCell";
+    _reuseIdentifier = @"PhotoCollectionViewCell";
     
-    self.automaticallyAdjustsScrollViewInsets = NO;
-
-    UINib *cellNib = [UINib nibWithNibName:self.reuseIdentifier bundle:nil];
-    [self.photoCollectionView registerNib:cellNib forCellWithReuseIdentifier:self.reuseIdentifier];
-    self.photoCollectionViewLayout.sectionInset = UIEdgeInsetsZero;
-    self.photoCollectionViewLayout.minimumLineSpacing = 0;
-    self.photoCollectionViewLayout.minimumInteritemSpacing = 0;
-    self.photoCollectionViewLayout.itemSize = CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT);
-    self.photoCollectionView.contentSize = CGSizeMake(self.photoObjectsArray.count * SCREEN_WIDTH, SCREEN_HEIGHT);
+    UINib *cellNib = [UINib nibWithNibName:_reuseIdentifier bundle:nil];
+    [_photoCollectionView registerNib:cellNib forCellWithReuseIdentifier:_reuseIdentifier];
+    _photoCollectionViewLayout.sectionInset = UIEdgeInsetsZero;
+    _photoCollectionViewLayout.minimumLineSpacing = 0;
+    _photoCollectionViewLayout.minimumInteritemSpacing = 0;
+    CGFloat screenHeight = SCREEN_HEIGHT;
+    CGFloat screenWidth = SCREEN_WIDTH;
+    _photoCollectionViewLayout.itemSize = CGSizeMake(screenWidth, screenHeight);
+    _photoCollectionView.contentSize = CGSizeMake(_photoObjectsArray.count * screenWidth, screenHeight);
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator {
@@ -70,58 +77,55 @@
 
 - (void)rotateCollectionViewWithSize:(CGSize)size {
 
-    self.photoCollectionViewLayout.itemSize = CGSizeMake(size.width, size.height);
+    _photoCollectionViewLayout.itemSize = CGSizeMake(size.width, size.height);
     
-    __weak typeof(self) weakSelf = self;
-    [self.photoCollectionView performBatchUpdates:nil completion:^(BOOL finished){
-        if (finished) {
-            [weakSelf.photoCollectionView scrollRectToVisible:CGRectMake(self.row * size.width, size.height / 2, size.width, 1)
-                                                     animated:NO];
-            [weakSelf.textView setContentOffset:CGPointZero animated:NO];
-        }
-    }];
+    [_photoCollectionView reloadData];
+    [_photoCollectionView setContentOffset:CGPointMake(_row * size.width, 0) animated:NO];
+
+//    [_photoCollectionView performBatchUpdates:nil completion:^(BOOL finished){
+//        [_photoCollectionView setContentOffset:CGPointMake(_row * size.width, 0) animated:NO];
+//    }];
 }
 
 - (void)setTextViewContent {
-    PhotoObject * photoObject = [self.photoObjectsArray objectAtIndex:self.row];
+    PhotoObject * photoObject = [_photoObjectsArray objectAtIndex:_row];
     
     NSString * text = photoObject.title;
-    if (photoObject.author) {
-        text = [text stringByAppendingString:[NSString stringWithFormat:@" -  %@", photoObject.author]];
+    NSString * author = photoObject.author;
+    NSString * content = photoObject.content;
+    
+    if (author && [author isEqualToString:@""] == NO) {
+        text = [text stringByAppendingString:[NSString stringWithFormat:@" -  %@", author]];
     }
     if (photoObject.content) {
-        text = [text stringByAppendingString:[NSString stringWithFormat:@"\n\n%@", photoObject.content]];
+        text = [text stringByAppendingString:[NSString stringWithFormat:@"\n\n%@", content]];
     }
-    self.textView.text = text;
+    _textView.text = text;
 }
 
-- (void)tapImageView:(UITapGestureRecognizer *)sender {
+- (void)hideOrShowOtherViews {
 
-    if (self.isHiddenAnimationRunning == YES) {
+    if (_isHiddenAnimationRunning == YES) {
         return;
     }
-    [self setToolBarAndTextViewHideOrNot:(!self.textView.hidden)];
+    [self setToolBarAndTextViewHideOrNot:(!_textView.hidden)];
 }
 
-- (void)doubleTapImageView:(UITapGestureRecognizer *)sender {
-
-    if (self.textView.hidden == YES) {
-        return;
-    }
+- (void)hideOtherViews {
     [self setToolBarAndTextViewHideOrNot:YES];
 }
 
 - (void)setToolBarAndTextViewHideOrNot:(BOOL)hidden {
     
-    self.isHiddenAnimationRunning = YES;
+    _isHiddenAnimationRunning = YES;
     [UIView animateWithDuration:0.2
                      animations:^(){
-                         self.toolBar.hidden = hidden;
-                         self.textView.hidden = hidden;
+                         _toolBar.hidden = hidden;
+                         _textView.hidden = hidden;
                      }
                      completion:^(BOOL finished){
                          if (finished == YES) {
-                             self.isHiddenAnimationRunning = NO;
+                             _isHiddenAnimationRunning = NO;
                          }
                      }
      ];
@@ -131,6 +135,10 @@
 }
 
 - (IBAction)touchBackButton:(id)sender {
+    if (SCREEN_WIDTH < SCREEN_HEIGHT) {
+        _shouldStatusBarHidden = NO;
+        [self setNeedsStatusBarAppearanceUpdate];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -142,17 +150,16 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
-    return self.photoObjectsArray.count;
+    return _photoObjectsArray.count;
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    PhotoCollectionViewCell * photoCollectionViewCell = [collectionView dequeueReusableCellWithReuseIdentifier:self.reuseIdentifier
+    PhotoCollectionViewCell * photoCollectionViewCell = [collectionView dequeueReusableCellWithReuseIdentifier:_reuseIdentifier
                                                                                                   forIndexPath:indexPath];
-    PhotoObject * photoObject = [self.photoObjectsArray objectAtIndex:indexPath.row];
-    [photoCollectionViewCell.imageView sd_setImageWithURL:[NSURL URLWithString:photoObject.url] placeholderImage:[UIImage imageNamed:@"placeHolder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL){
-        [photoCollectionViewCell finishSetImage:image];
-    }];
+    PhotoObject * photoObject = [_photoObjectsArray objectAtIndex:indexPath.row];
+    [photoCollectionViewCell.imageView sd_setImageWithURL:[NSURL URLWithString:photoObject.url]
+                                         placeholderImage:[UIImage imageNamed:@"placeHolder"]];
     photoCollectionViewCell.delegate = self;
     
     return photoCollectionViewCell;
@@ -169,9 +176,12 @@
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    int row = (scrollView.contentOffset.x + 0.5 * scrollView.frame.size.width) / scrollView.frame.size.width;
-    if (row < self.photoObjectsArray.count && self.row != row) {
-        self.row = row;
+    CGFloat scrollViewWidth = scrollView.frame.size.width;
+    CGFloat offSetX = scrollView.contentOffset.x;
+    
+    int row = (offSetX + 0.5 * scrollViewWidth) / scrollViewWidth;
+    if (row < _photoObjectsArray.count && _row != row) {
+        _row = row;
         [self setTextViewContent];
     }
 }
